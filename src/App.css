@@ -1,24 +1,51 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
-}
-
 .App-header {
   background-color: #222;
-  height: 150px;
+  height: 60px;
   padding: 20px;
   color: white;
+  margin-bottom: 40px;
 }
 
-.App-intro {
-  font-size: large;
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px white inset;
 }
 
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.overview {
+  margin:15px;
+}
+
+.form {
+    margin-top: 24px;
+    transition: opacity 0.5s linear;
+    text-align: center;
+}
+
+.form.score-leave{
+    opacity: 1;
+}
+
+.form.score-leave.score-leave-active {
+    opacity: 0;
+}
+
+.url-input {
+    margin-right: 24px;
+}
+
+.result {
+    transition: opacity 0.5s linear;
+    max-width: 960px;
+    margin: 24px auto;
+}
+
+.result.score-enter-active {
+    opacity: 1;
+}
+.result.score-enter {
+    opacity: 0;
+    position: absolute;
+}
+
+.result-description {
+    margin-bottom: 24px;
 }
