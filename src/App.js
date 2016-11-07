@@ -8,6 +8,7 @@ import TextField from 'material-ui/TextField';
 import AppBar from 'material-ui/AppBar';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
+import CircularProgress from 'material-ui/CircularProgress';
 
 
 injectTapEventPlugin();
@@ -46,6 +47,7 @@ class App extends Component {
         this.setState({
             loading: true,
             error: false,
+            url: url,
         });
 
         fetch(`https://www.googleapis.com/pagespeedonline/v2/runPagespeed?url=${url}&strategy=mobile`)
@@ -73,7 +75,9 @@ class App extends Component {
     };
 
     renderBody() {
+
         if (typeof this.state.result.speed === 'undefined') {
+            const buttonText = this.state.loading ? 'loading...' : 'analyze';
             return (<form className="form" key="form" onSubmit={this.executePageSpeed}>
                 <TextField
                     className="url-input"
@@ -83,7 +87,8 @@ class App extends Component {
                     onChange={(_, value) => this.value =  value}
                     disabled={this.state.loading}
                 />
-                <RaisedButton disabled={this.state.loading} label="go!" onClick={this.executePageSpeed}/>
+                <RaisedButton disabled={this.state.loading} label={buttonText} onClick={this.executePageSpeed}/>
+
             </form>)
         } else {
             let betterPagesPercentage = 100 / this.state.topsites.length * this.state.result.betterPages.length;
@@ -94,12 +99,15 @@ class App extends Component {
                         <Card>
                             <CardHeader title="Result" />
                             <CardText>
-                                {betterPagesPercentage}% of top 50 websites perform better than you!
+                                Your Google Page Speed Score is: <a target="_blank" href={`https://developers.google.com/speed/pagespeed/insights/?url=${this.state.url}&tab=mobile`}>{this.state.result.speed}</a><br/>
+                                {betterPagesPercentage}% of top 50 websites perform better than yours
                             </CardText>
                         </Card>
                     </div>
                     <div className="result-table">
                         <Card>
+                            <CardHeader title="Top sites better than yours" />
+
                             <Table allRowsSelected={false} selectable={false} className="overview">
                                 <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
                                     <TableRow>
@@ -129,7 +137,9 @@ class App extends Component {
         return (
             <MuiThemeProvider>
                 <div className="App">
-                    <AppBar iconElementLeft={<span/>} title="How slow is your site on mobile?" />
+                    <a href="/" className="app-bar-link">
+                        <AppBar iconElementLeft={<span/>} title="How slow is your site on mobile?" />
+                    </a>
                     <div className="App-intro">
                         <ReactCSSTransitionGroup
                             transitionName="score"
