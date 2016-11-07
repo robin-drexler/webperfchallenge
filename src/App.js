@@ -75,8 +75,10 @@ class App extends Component {
             });
     };
 
-    reloadPage = () => {
-        window.location.reload();
+    getHelp = () => {
+        ga('send', 'event', 'result-page', 'get-help', '', { // eslint-disable-line no-undef
+            'hitCallback': () => { window.location.href = 'https://developers.google.com/speed/docs/insights/rules'}
+        });
     };
 
     toggleMenu = (e) => {
@@ -128,7 +130,7 @@ class App extends Component {
                                         {betterPagesPercentage}% of top 50 most popular websites perform better than your site.
                                     </div>
                                     <div>
-                                        <RaisedButton secondary label="Try another site" onClick={this.reloadPage}/>
+                                        <RaisedButton primary label="Get help" onClick={this.getHelp}/>
                                     </div>
                                 </div>
                             </CardText>
