@@ -64,6 +64,7 @@ const start = `<!doctype html>
       .result {
           transition: opacity 0.5s linear;
           max-width: 960px;
+          width: 95vw;
           margin: 24px auto;
       }
 
@@ -81,13 +82,9 @@ const start = `<!doctype html>
             * {
           box-sizing: border-box;
       }
-      .result-content {
-          display: flex;
-          justify-content: space-between;
-          flex-wrap: wrap;
-      }
       .result-content-text {
           margin-bottom: 10px;
+          font-size: 2em;
       }
       .input-content {
         display: flex;

@@ -120,12 +120,12 @@ class App extends Component {
                 <div className="result" key="result">
                     <div className="result-description">
                         <Card>
-                            <CardHeader title="Result" />
                             <CardText>
                                 <div className="result-content">
                                     <div className="result-content-text">
-                                        Your Google Page Speed Score is: <a target="_blank" href={`https://developers.google.com/speed/pagespeed/insights/?url=${this.state.url}&tab=mobile`}>{this.state.result.speed}</a><br/>
-                                        {betterPagesPercentage}% of top 50 most popular websites perform better than yours
+                                        Your Google Page Speed Score is: <a target="_blank" href={`https://developers.google.com/speed/pagespeed/insights/?url=${this.state.url}&tab=mobile`}>{this.state.result.speed}</a>
+                                        <br/><br/>
+                                        {betterPagesPercentage}% of top 50 most popular websites perform better than your site.
                                     </div>
                                     <div>
                                         <RaisedButton secondary label="Try another site" onClick={this.reloadPage}/>
