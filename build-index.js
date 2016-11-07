@@ -25,6 +25,7 @@ const start = `<!doctype html>
       body, html {
         margin: 0;
         padding: 0;
+        font-family:Roboto, sans-serif;
       }
       input:-webkit-autofill {
           -webkit-box-shadow: 0 0 0px 1000px white inset;
@@ -68,6 +69,17 @@ const start = `<!doctype html>
 
       .result-description {
           margin-bottom: 24px;
+      }
+            * {
+          box-sizing: border-box;
+      }
+      .result-content {
+          display: flex;
+          justify-content: space-between;
+          flex-wrap: wrap;
+      }
+      .result-content-text {
+          margin-bottom: 10px;
       }
       .app-bar-link {
         text-decoration: none;

@@ -74,11 +74,18 @@ class App extends Component {
             });
     };
 
+    reloadPage = () => {
+        window.location.reload();
+    };
+
     renderBody() {
 
         if (typeof this.state.result.speed === 'undefined') {
             const buttonText = this.state.loading ? 'loading...' : 'analyze';
             return (<form className="form" key="form" onSubmit={this.executePageSpeed}>
+                <h2>
+                    Compare your website's mobile performance with the top 50 of the world.
+                </h2>
                 <TextField
                     className="url-input"
                     id="search"
@@ -87,7 +94,7 @@ class App extends Component {
                     onChange={(_, value) => this.value =  value}
                     disabled={this.state.loading}
                 />
-                <RaisedButton disabled={this.state.loading} label={buttonText} onClick={this.executePageSpeed}/>
+                <RaisedButton primary disabled={this.state.loading} label={buttonText} onClick={this.executePageSpeed}/>
 
             </form>)
         } else {
@@ -99,14 +106,21 @@ class App extends Component {
                         <Card>
                             <CardHeader title="Result" />
                             <CardText>
-                                Your Google Page Speed Score is: <a target="_blank" href={`https://developers.google.com/speed/pagespeed/insights/?url=${this.state.url}&tab=mobile`}>{this.state.result.speed}</a><br/>
-                                {betterPagesPercentage}% of top 50 websites perform better than yours
+                                <div className="result-content">
+                                    <div className="result-content-text">
+                                        Your Google Page Speed Score is: <a target="_blank" href={`https://developers.google.com/speed/pagespeed/insights/?url=${this.state.url}&tab=mobile`}>{this.state.result.speed}</a><br/>
+                                        {betterPagesPercentage}% of top 50 websites perform better than yours
+                                    </div>
+                                    <div>
+                                        <RaisedButton secondary label="Try another site" onClick={this.reloadPage}/>
+                                    </div>
+                                </div>
                             </CardText>
                         </Card>
                     </div>
                     <div className="result-table">
                         <Card>
-                            <CardHeader title="Top sites better than yours" />
+                            <CardHeader title="Top sites performing better than yours" />
 
                             <Table allRowsSelected={false} selectable={false} className="overview">
                                 <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
@@ -138,7 +152,7 @@ class App extends Component {
             <MuiThemeProvider>
                 <div className="App">
                     <a href="/" className="app-bar-link">
-                        <AppBar iconElementLeft={<span/>} title="How slow is your site on mobile?" />
+                        <AppBar iconElementLeft={<span/>} title="How is your website performing?" />
                     </a>
                     <div className="App-intro">
                         <ReactCSSTransitionGroup
