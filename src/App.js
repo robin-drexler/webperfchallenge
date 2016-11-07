@@ -70,16 +70,18 @@ class App extends Component {
                     }
                 });
             }).catch((err) => {
-                this.setState({
-                    loading: false,
-                    error: err.message,
-                });
+            this.setState({
+                loading: false,
+                error: err.message,
             });
+        });
     };
 
     getHelp = () => {
         ga('send', 'event', 'result-page', 'get-help', '', { // eslint-disable-line no-undef
-            'hitCallback': () => { window.location.href = 'https://developers.google.com/speed/docs/insights/rules'}
+            'hitCallback': () => {
+                window.location.href = 'https://developers.google.com/speed/docs/insights/rules'
+            }
         });
     };
 
@@ -100,36 +102,47 @@ class App extends Component {
         if (typeof this.state.result.speed === 'undefined') {
             const buttonText = this.state.loading ? 'loading...' : 'analyze';
             return (<form className="form" key="form" onSubmit={this.executePageSpeed}>
-                <h2>
-                    Compare your website's mobile performance with the top 50 most popular in the world.
-                </h2>
-                <div className="input-content">
-                    <TextField
-                        className="url-input"
-                        id="search"
-                        errorText={this.state.error}
-                        floatingLabelText="Enter your website URL"
-                        onChange={(_, value) => this.value =  value}
-                        disabled={this.state.loading}
-                    />
-                    <div>
-                        <RaisedButton primary disabled={this.state.loading} label={buttonText} onClick={this.executePageSpeed}/>
-                    </div>
+
+                <div className="card">
+                    <Card>
+                        <CardText>
+
+                            <h2>
+                                Compare your website's mobile performance with the top 50 most popular in the world.
+                            </h2>
+                            <div className="input-content">
+                                <TextField
+                                    className="url-input"
+                                    id="search"
+                                    errorText={this.state.error}
+                                    floatingLabelText="Enter your website URL"
+                                    onChange={(_, value) => this.value = value}
+                                    disabled={this.state.loading}
+                                />
+                                <div>
+                                    <RaisedButton primary disabled={this.state.loading} label={buttonText}
+                                                  onClick={this.executePageSpeed}/>
+                                </div>
+                            </div>
+                        </CardText>
+                    </Card>
                 </div>
             </form>)
         } else {
             let betterPagesPercentage = 100 / this.state.topsites.length * this.state.result.betterPages.length;
             betterPagesPercentage = Math.ceil(betterPagesPercentage);
             return (
-                <div className="result" key="result">
+                <div className="result card" key="result">
                     <div className="result-description">
                         <Card>
                             <CardText>
                                 <div className="result-content">
                                     <div className="result-content-text">
-                                        Your Google Page Speed Score is: <a target="_blank" href={`https://developers.google.com/speed/pagespeed/insights/?url=${this.state.url}&tab=mobile`}>{this.state.result.speed}</a>
+                                        Your Google Page Speed Score is: <a target="_blank"
+                                                                            href={`https://developers.google.com/speed/pagespeed/insights/?url=${this.state.url}&tab=mobile`}>{this.state.result.speed}</a>
                                         <br/><br/>
-                                        {betterPagesPercentage}% of top 50 most popular websites perform better than your site.
+                                        {betterPagesPercentage}% of top 50 most popular websites perform better than
+                                        your site.
                                     </div>
                                     <div>
                                         <RaisedButton primary label="Get help" onClick={this.getHelp}/>
@@ -140,7 +153,7 @@ class App extends Component {
                     </div>
                     <div className="result-table">
                         <Card>
-                            <CardHeader title="Top sites performing better than yours" />
+                            <CardHeader title="Top sites performing better than yours"/>
 
                             <Table allRowsSelected={false} selectable={false} className="overview">
                                 <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
@@ -175,7 +188,7 @@ class App extends Component {
                         <MenuItem onClick={this.goto('/')}>Home</MenuItem>
                         <MenuItem onClick={this.goto('/about.html')}>Imprint and privacy policy</MenuItem>
                     </Drawer>
-                        <AppBar onLeftIconButtonTouchTap={this.toggleMenu} title="How is your website performing?" />
+                    <AppBar onLeftIconButtonTouchTap={this.toggleMenu} title="How is your website performing?"/>
                     <div className="App-intro">
                         <ReactCSSTransitionGroup
                             transitionName="score"
@@ -185,6 +198,9 @@ class App extends Component {
                             {this.renderBody()}
                         </ReactCSSTransitionGroup>
 
+                    </div>
+                    <div style={{textAlign: 'center', paddingTop: '10px', fontSize: '0.8em'}}>
+                        Made with 💖, 🍕and 🍻 by <a href="https://twitter.com/tobiasbales">@TobiasBales</a> and <a href="https://twitter.com/robindrexler">@RobinDrexler</a>
                     </div>
                 </div>
             </MuiThemeProvider>

@@ -63,6 +63,9 @@ const start = `<!doctype html>
 
       .result {
           transition: opacity 0.5s linear;
+      }
+      
+      .card {
           max-width: 960px;
           width: 95vw;
           margin: 24px auto;
@@ -90,6 +93,7 @@ const start = `<!doctype html>
         display: flex;
         align-items: baseline;
         justify-content: center;
+        margin-bottom: 20px;
       }
     </style>
   </head>
