@@ -173,7 +173,7 @@ class App extends Component {
                 <div className="App">
                     <Drawer open={this.state.menuOpened}>
                         <MenuItem onClick={this.goto('/')}>Home</MenuItem>
-                        <MenuItem onClick={this.goto('/about.html')}>Impressum</MenuItem>
+                        <MenuItem onClick={this.goto('/about.html')}>Imprint and privacy policy</MenuItem>
                     </Drawer>
                         <AppBar onLeftIconButtonTouchTap={this.toggleMenu} title="How is your website performing?" />
                     <div className="App-intro">
