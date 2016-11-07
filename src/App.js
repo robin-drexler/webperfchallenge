@@ -8,8 +8,8 @@ import TextField from 'material-ui/TextField';
 import AppBar from 'material-ui/AppBar';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
-import CircularProgress from 'material-ui/CircularProgress';
-
+import Drawer from 'material-ui/Drawer';
+import MenuItem from 'material-ui/MenuItem';
 
 injectTapEventPlugin();
 
@@ -20,6 +20,7 @@ class App extends Component {
         loading: false,
         result: {},
         error: null,
+        menuOpened: false
     };
 
     componentDidMount() {
@@ -78,13 +79,25 @@ class App extends Component {
         window.location.reload();
     };
 
+    toggleMenu = (e) => {
+        this.setState({
+            menuOpened: !this.state.menuOpened
+        });
+    };
+
+    goto = (where) => {
+        return () => {
+            window.location.href = where;
+        }
+    };
+
     renderBody() {
 
         if (typeof this.state.result.speed === 'undefined') {
             const buttonText = this.state.loading ? 'loading...' : 'analyze';
             return (<form className="form" key="form" onSubmit={this.executePageSpeed}>
                 <h2>
-                    Compare your website's mobile performance with the top 50 of the world.
+                    Compare your website's mobile performance with the top 50 most popular in the world.
                 </h2>
                 <TextField
                     className="url-input"
@@ -109,7 +122,7 @@ class App extends Component {
                                 <div className="result-content">
                                     <div className="result-content-text">
                                         Your Google Page Speed Score is: <a target="_blank" href={`https://developers.google.com/speed/pagespeed/insights/?url=${this.state.url}&tab=mobile`}>{this.state.result.speed}</a><br/>
-                                        {betterPagesPercentage}% of top 50 websites perform better than yours
+                                        {betterPagesPercentage}% of top 50 most popular websites perform better than yours
                                     </div>
                                     <div>
                                         <RaisedButton secondary label="Try another site" onClick={this.reloadPage}/>
@@ -151,9 +164,11 @@ class App extends Component {
         return (
             <MuiThemeProvider>
                 <div className="App">
-                    <a href="/" className="app-bar-link">
-                        <AppBar iconElementLeft={<span/>} title="How is your website performing?" />
-                    </a>
+                    <Drawer open={this.state.menuOpened}>
+                        <MenuItem onClick={this.goto('/')}>Home</MenuItem>
+                        <MenuItem onClick={this.goto('/about.html')}>Impressum</MenuItem>
+                    </Drawer>
+                        <AppBar onLeftIconButtonTouchTap={this.toggleMenu} title="How is your website performing?" />
                     <div className="App-intro">
                         <ReactCSSTransitionGroup
                             transitionName="score"
