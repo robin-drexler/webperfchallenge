@@ -45,6 +45,8 @@ class App extends Component {
         e.preventDefault();
         const url = encodeURI(this.value);
 
+        ga('send', 'event', 'search', 'start', this.value); // eslint-disable-line no-undef
+
         this.setState({
             loading: true,
             error: false,

@@ -20,7 +20,7 @@ const start = `<!doctype html>
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>How slow is your site on mobile?</title>
+    <title>Mobile performance challenge</title>
     <style>
       body, html {
         margin: 0;
