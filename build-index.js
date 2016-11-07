@@ -89,8 +89,10 @@ const start = `<!doctype html>
       .result-content-text {
           margin-bottom: 10px;
       }
-      .app-bar-link {
-        text-decoration: none;
+      .input-content {
+        display: flex;
+        align-items: baseline;
+        justify-content: center;
       }
     </style>
   </head>

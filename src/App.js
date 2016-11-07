@@ -99,16 +99,19 @@ class App extends Component {
                 <h2>
                     Compare your website's mobile performance with the top 50 most popular in the world.
                 </h2>
-                <TextField
-                    className="url-input"
-                    id="search"
-                    errorText={this.state.error}
-                    floatingLabelText="Enter your website URL"
-                    onChange={(_, value) => this.value =  value}
-                    disabled={this.state.loading}
-                />
-                <RaisedButton primary disabled={this.state.loading} label={buttonText} onClick={this.executePageSpeed}/>
-
+                <div className="input-content">
+                    <TextField
+                        className="url-input"
+                        id="search"
+                        errorText={this.state.error}
+                        floatingLabelText="Enter your website URL"
+                        onChange={(_, value) => this.value =  value}
+                        disabled={this.state.loading}
+                    />
+                    <div>
+                        <RaisedButton primary disabled={this.state.loading} label={buttonText} onClick={this.executePageSpeed}/>
+                    </div>
+                </div>
             </form>)
         } else {
             let betterPagesPercentage = 100 / this.state.topsites.length * this.state.result.betterPages.length;
