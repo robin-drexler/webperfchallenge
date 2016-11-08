@@ -13,6 +13,12 @@ import MenuItem from 'material-ui/MenuItem';
 
 injectTapEventPlugin();
 
+function sanitizeUrl(url) {
+    if (url.match(/https?:\/\//) === null) {
+        return 'http://' + url;
+    }
+    return url;
+}
 
 class App extends Component {
     state = {
@@ -20,7 +26,8 @@ class App extends Component {
         loading: false,
         result: {},
         error: null,
-        menuOpened: false
+        menuOpened: false,
+        value: ''
     };
 
     componentDidMount() {
@@ -43,7 +50,8 @@ class App extends Component {
 
     executePageSpeed = (e) => {
         e.preventDefault();
-        const url = encodeURI(this.value);
+        const sanitizedUrl = sanitizeUrl(this.state.value);
+        const url = encodeURI(sanitizedUrl);
 
         ga('send', 'event', 'search', 'start', this.value); // eslint-disable-line no-undef
 
@@ -51,6 +59,7 @@ class App extends Component {
             loading: true,
             error: false,
             url: url,
+            value: sanitizedUrl,
         });
 
         fetch(`https://www.googleapis.com/pagespeedonline/v2/runPagespeed?url=${url}&strategy=mobile`)
@@ -116,8 +125,9 @@ class App extends Component {
                                     id="search"
                                     errorText={this.state.error}
                                     floatingLabelText="Enter your website URL"
-                                    onChange={(_, value) => this.value = value}
+                                    onChange={(_, value) => this.setState({ value })}
                                     disabled={this.state.loading}
+                                    value={this.state.value}
                                 />
                                 <div>
                                     <RaisedButton primary disabled={this.state.loading} label={buttonText}
