@@ -20,6 +20,16 @@ function sanitizeUrl(url) {
     return url;
 }
 
+function getUrlQueryParam() {
+    const matches = window.location.search.match(/\?url=(.*?)(&|$)/);
+
+    if (matches) {
+        return matches[1];
+    } else {
+        return null;
+    }
+}
+
 class App extends Component {
     state = {
         topsites: [],
@@ -31,6 +41,9 @@ class App extends Component {
     };
 
     componentDidMount() {
+        const urlParam = getUrlQueryParam();
+        let shouldExecutePageSpeed = !!urlParam;
+
         const topsitesRef = this.props.firebase.database().ref("topsites").orderByChild("desktop");
 
         topsitesRef.on('value', (snapshot) => {
@@ -44,12 +57,21 @@ class App extends Component {
             });
             this.setState({
                 topsites: topsites,
+            }, () => {
+                if (shouldExecutePageSpeed) {
+                    // only do it once
+                    shouldExecutePageSpeed = false;
+                    this.setState({
+                        value: urlParam
+                    }, () => {
+                        this.executePageSpeed();
+                    })
+                }
             });
         });
     }
 
-    executePageSpeed = (e) => {
-        e.preventDefault();
+    executePageSpeed = () => {
         const sanitizedUrl = sanitizeUrl(this.state.value);
         const url = encodeURI(sanitizedUrl);
 
@@ -110,7 +132,7 @@ class App extends Component {
 
         if (typeof this.state.result.speed === 'undefined') {
             const buttonText = this.state.loading ? 'loading...' : 'analyze';
-            return (<form className="form" key="form" onSubmit={this.executePageSpeed}>
+            return (<form className="form" key="form" onSubmit={(e) => { e.preventDefault(); this.executePageSpeed() }}>
 
                 <div className="card">
                     <Card>
