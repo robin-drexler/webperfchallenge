@@ -117,6 +117,7 @@ class App extends Component {
         if (typeof this.state.result.speed === 'undefined') {
             return (
                 <SearchBox
+                    key="form"
                     loading={this.state.loading}
                     error={this.state.error}
                     searchValue={this.state.value}
@@ -127,6 +128,7 @@ class App extends Component {
         } else {
             return (
                 <ResultBox
+                    key="result"
                     topSites={this.state.topSites}
                     betterPages={this.state.result.betterPages}
                     speed={this.state.result.speed}

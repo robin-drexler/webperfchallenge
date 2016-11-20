@@ -9,7 +9,7 @@ export default function ResultBox(props) {
     betterPagesPercentage = Math.ceil(betterPagesPercentage);
 
     return (
-        <div className="result card" key="result">
+        <div className="result card">
             <div className="result-description">
                 <Card>
                     <CardText>

@@ -13,7 +13,7 @@ export default function SearchBox(props) {
     const buttonText = props.loading ? 'loading...' : 'analyze';
 
     return (
-        <form className="form" key="form" onSubmit={handleSubmit}>
+        <form className="form" onSubmit={handleSubmit}>
 
             <div className="card">
                 <Card>
