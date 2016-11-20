@@ -19,6 +19,19 @@ function sanitizeUrl(url) {
     return url;
 }
 
+function getUrlQueryParam() {
+    if (typeof window === 'undefined') { // when rendered on server
+        return;
+    }
+    const matches = window.location.search.match(/\?url=(.*?)(&|$)/);
+
+    if (matches) {
+        return matches[1];
+    } else {
+        return null;
+    }
+}
+
 class App extends Component {
     state = {
         topSites: [],
@@ -28,6 +41,17 @@ class App extends Component {
         menuOpened: false,
         value: ''
     };
+
+    componentWillMount() {
+        const urlByQuery = getUrlQueryParam();
+
+        if (urlByQuery) {
+            this.setState({value: urlByQuery}, () => {
+                this.executePageSpeed();
+            })
+
+        }
+    }
 
     componentDidMount() {
         const topsitesRef = this.props.firebase.database().ref("topsites").orderByChild("desktop");
@@ -47,9 +71,9 @@ class App extends Component {
         });
     }
 
-    executePageSpeed = (searchUrl) => {
+    executePageSpeed = () => {
         // e.preventDefault();
-        const sanitizedUrl = sanitizeUrl(searchUrl);
+        const sanitizedUrl = sanitizeUrl(this.state.value);
         const url = encodeURI(sanitizedUrl);
 
         ga('send', 'event', 'search', 'start', url); // eslint-disable-line no-undef
@@ -88,9 +112,6 @@ class App extends Component {
     handleSearchInputChange = (e) => {
         this.setState({value: e.target.value});
     };
-    handleSearch = (e) => {
-        this.executePageSpeed(this.state.value);
-    };
 
     getHelp = () => {
         ga('send', 'event', 'result-page', 'get-help', '', { // eslint-disable-line no-undef
@@ -121,7 +142,7 @@ class App extends Component {
                     loading={this.state.loading}
                     error={this.state.error}
                     searchValue={this.state.value}
-                    onSearch={this.handleSearch}
+                    onSearch={this.executePageSpeed}
                     onSearchInputChange={this.handleSearchInputChange}
                 />
                 )
