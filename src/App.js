@@ -2,16 +2,13 @@ import React, {Component, PropTypes} from 'react';
 import './App.css';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import RaisedButton from 'material-ui/RaisedButton';
 import injectTapEventPlugin from 'react-tap-event-plugin';
-import TextField from 'material-ui/TextField';
 import AppBar from 'material-ui/AppBar';
-import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
-import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
 
 import SearchBox from './components/SearchBox';
+import ResultBox from './components/ResultBox';
 
 injectTapEventPlugin();
 
@@ -24,7 +21,7 @@ function sanitizeUrl(url) {
 
 class App extends Component {
     state = {
-        topsites: [],
+        topSites: [],
         loading: false,
         result: {},
         error: null,
@@ -36,7 +33,7 @@ class App extends Component {
         const topsitesRef = this.props.firebase.database().ref("topsites").orderByChild("desktop");
 
         topsitesRef.on('value', (snapshot) => {
-            const topsites = snapshot.val().sort(function (a, b) {
+            const topSites = snapshot.val().sort(function (a, b) {
                 const keyA = a.mobile;
                 const keyB = b.mobile;
 
@@ -45,7 +42,7 @@ class App extends Component {
                 return 0;
             });
             this.setState({
-                topsites: topsites,
+                topSites: topSites,
             });
         });
     }
@@ -71,7 +68,7 @@ class App extends Component {
                     throw new Error(json.error.message)
                 }
                 const score = json.ruleGroups.SPEED.score;
-                const betterPerformingPages = this.state.topsites.filter((site) => site.mobile > score);
+                const betterPerformingPages = this.state.topSites.filter((site) => site.mobile > score);
 
                 this.setState({
                     loading: false,
@@ -118,7 +115,6 @@ class App extends Component {
     renderBody() {
 
         if (typeof this.state.result.speed === 'undefined') {
-            const buttonText = this.state.loading ? 'loading...' : 'analyze';
             return (
                 <SearchBox
                     loading={this.state.loading}
@@ -129,54 +125,14 @@ class App extends Component {
                 />
                 )
         } else {
-            let betterPagesPercentage = 100 / this.state.topsites.length * this.state.result.betterPages.length;
-            betterPagesPercentage = Math.ceil(betterPagesPercentage);
             return (
-                <div className="result card" key="result">
-                    <div className="result-description">
-                        <Card>
-                            <CardText>
-                                <div className="result-content">
-                                    <div className="result-content-text">
-                                        Your Google Page Speed Score is: <a target="_blank"
-                                                                            href={`https://developers.google.com/speed/pagespeed/insights/?url=${this.state.url}&tab=mobile`}>{this.state.result.speed}</a>
-                                        <br/><br/>
-                                        {betterPagesPercentage}% of top 50 most popular websites perform better than
-                                        your site.
-                                    </div>
-                                    <div>
-                                        <RaisedButton primary label="Get help" onClick={this.getHelp}/>
-                                    </div>
-                                </div>
-                            </CardText>
-                        </Card>
-                    </div>
-                    <div className="result-table">
-                        <Card>
-                            <CardHeader title="Top sites performing better than yours"/>
-
-                            <Table allRowsSelected={false} selectable={false} className="overview">
-                                <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
-                                    <TableRow>
-                                        <TableHeaderColumn>site</TableHeaderColumn>
-                                        <TableHeaderColumn>mobile score</TableHeaderColumn>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody displayRowCheckbox={false}>
-                                    {this.state.result.betterPages.map((entry, idx) => {
-                                        return (
-                                            <TableRow key={idx}>
-                                                <TableRowColumn>{entry.site}</TableRowColumn>
-                                                <TableRowColumn>{entry.mobile}</TableRowColumn>
-                                            </TableRow>
-                                        );
-                                    })}
-                                </TableBody>
-                            </Table>
-                        </Card>
-                    </div>
-                </div>
-            );
+                <ResultBox
+                    topSites={this.state.topSites}
+                    betterPages={this.state.result.betterPages}
+                    speed={this.state.result.speed}
+                    getHelp={this.getHelp}
+                />
+            )
         }
     }
 
