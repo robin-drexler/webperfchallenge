@@ -11,6 +11,8 @@ import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColu
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
 
+import SearchBox from './components/SearchBox';
+
 injectTapEventPlugin();
 
 function sanitizeUrl(url) {
@@ -48,16 +50,16 @@ class App extends Component {
         });
     }
 
-    executePageSpeed = (e) => {
-        e.preventDefault();
-        const sanitizedUrl = sanitizeUrl(this.state.value);
+    executePageSpeed = (searchUrl) => {
+        // e.preventDefault();
+        const sanitizedUrl = sanitizeUrl(searchUrl);
         const url = encodeURI(sanitizedUrl);
 
-        ga('send', 'event', 'search', 'start', this.value); // eslint-disable-line no-undef
+        ga('send', 'event', 'search', 'start', url); // eslint-disable-line no-undef
 
         this.setState({
             loading: true,
-            error: false,
+            error: null,
             url: url,
             value: sanitizedUrl,
         });
@@ -86,6 +88,13 @@ class App extends Component {
         });
     };
 
+    handleSearchInputChange = (e) => {
+        this.setState({value: e.target.value});
+    };
+    handleSearch = (e) => {
+        this.executePageSpeed(this.state.value);
+    };
+
     getHelp = () => {
         ga('send', 'event', 'result-page', 'get-help', '', { // eslint-disable-line no-undef
             'hitCallback': () => {
@@ -110,34 +119,15 @@ class App extends Component {
 
         if (typeof this.state.result.speed === 'undefined') {
             const buttonText = this.state.loading ? 'loading...' : 'analyze';
-            return (<form className="form" key="form" onSubmit={this.executePageSpeed}>
-
-                <div className="card">
-                    <Card>
-                        <CardText>
-
-                            <h2>
-                                Compare your website's mobile performance with the top 50 most popular in the world.
-                            </h2>
-                            <div className="input-content">
-                                <TextField
-                                    className="url-input"
-                                    id="search"
-                                    errorText={this.state.error}
-                                    floatingLabelText="Enter your website URL"
-                                    onChange={(_, value) => this.setState({ value })}
-                                    disabled={this.state.loading}
-                                    value={this.state.value}
-                                />
-                                <div>
-                                    <RaisedButton primary disabled={this.state.loading} label={buttonText}
-                                                  onClick={this.executePageSpeed}/>
-                                </div>
-                            </div>
-                        </CardText>
-                    </Card>
-                </div>
-            </form>)
+            return (
+                <SearchBox
+                    loading={this.state.loading}
+                    error={this.state.error}
+                    searchValue={this.state.value}
+                    onSearch={this.handleSearch}
+                    onSearchInputChange={this.handleSearchInputChange}
+                />
+                )
         } else {
             let betterPagesPercentage = 100 / this.state.topsites.length * this.state.result.betterPages.length;
             betterPagesPercentage = Math.ceil(betterPagesPercentage);
@@ -210,7 +200,8 @@ class App extends Component {
 
                     </div>
                     <div style={{textAlign: 'center', paddingTop: '10px', fontSize: '0.8em'}}>
-                        Made with 💖, 🍕and 🍻 by <a href="https://twitter.com/tobiasbales">@TobiasBales</a> and <a href="https://twitter.com/robindrexler">@RobinDrexler</a>
+                        Made with 💖, 🍕and 🍻 by <a href="https://twitter.com/tobiasbales">@TobiasBales</a> and <a
+                        href="https://twitter.com/robindrexler">@RobinDrexler</a>
                     </div>
                 </div>
             </MuiThemeProvider>
