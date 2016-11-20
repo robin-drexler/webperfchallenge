@@ -12,6 +12,10 @@ import ResultBox from './components/ResultBox';
 
 injectTapEventPlugin();
 
+function isInBrowser() {
+    return typeof window !== 'undefined';
+}
+
 function sanitizeUrl(url) {
     if (url.match(/https?:\/\//) === null) {
         return 'http://' + url;
@@ -20,7 +24,7 @@ function sanitizeUrl(url) {
 }
 
 function getUrlQueryParam() {
-    if (typeof window === 'undefined') { // when rendered on server
+    if (!isInBrowser()) { // when rendered on server
         return;
     }
     const matches = window.location.search.match(/\?url=(.*?)(&|$)/);
@@ -75,7 +79,7 @@ class App extends Component {
                 this.executePageSpeed();
             })
         } else {
-            this.loadTopSites(); // preload top sites in case user puts url in quickly
+            isInBrowser() && this.loadTopSites(); // preload top sites in case user puts url in quickly
         }
     }
 
