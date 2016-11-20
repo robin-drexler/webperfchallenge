@@ -42,6 +42,31 @@ class App extends Component {
         value: ''
     };
 
+    loadTopSites = (() => {
+        let topSites;
+
+        return () => {
+            if (topSites) {
+                return Promise.resolve(topSites);
+            }
+
+            return new Promise((resolve) => {
+                const topsitesRef = this.props.firebase.database().ref("topsites").orderByChild("desktop");
+                topsitesRef.once('value', (snapshot) => {
+                        topSites = snapshot.val().sort(function (a, b) {
+                        const keyA = a.mobile;
+                        const keyB = b.mobile;
+
+                        if (keyA < keyB) return 1;
+                        if (keyA > keyB) return -1;
+                        return 0;
+                    });
+                    resolve(topSites)
+                });
+            });
+        };
+    })();
+
     componentWillMount() {
         const urlByQuery = getUrlQueryParam();
 
@@ -49,26 +74,9 @@ class App extends Component {
             this.setState({value: urlByQuery}, () => {
                 this.executePageSpeed();
             })
-
+        } else {
+            this.loadTopSites(); // preload top sites in case user puts url in quickly
         }
-    }
-
-    componentDidMount() {
-        const topsitesRef = this.props.firebase.database().ref("topsites").orderByChild("desktop");
-
-        topsitesRef.on('value', (snapshot) => {
-            const topSites = snapshot.val().sort(function (a, b) {
-                const keyA = a.mobile;
-                const keyB = b.mobile;
-
-                if (keyA < keyB) return 1;
-                if (keyA > keyB) return -1;
-                return 0;
-            });
-            this.setState({
-                topSites: topSites,
-            });
-        });
     }
 
     executePageSpeed = () => {
@@ -85,26 +93,29 @@ class App extends Component {
             value: sanitizedUrl,
         });
 
-        fetch(`https://www.googleapis.com/pagespeedonline/v2/runPagespeed?url=${url}&strategy=mobile`)
-            .then(r => r.json())
-            .then((json) => {
-                if (json.error) {
-                    throw new Error(json.error.message)
-                }
-                const score = json.ruleGroups.SPEED.score;
-                const betterPerformingPages = this.state.topSites.filter((site) => site.mobile > score);
+        this.loadTopSites().then((topSites) => {
+            fetch(`https://www.googleapis.com/pagespeedonline/v2/runPagespeed?url=${url}&strategy=mobile`)
+                .then(r => r.json())
+                .then((json) => {
+                    if (json.error) {
+                        throw new Error(json.error.message)
+                    }
+                    const score = json.ruleGroups.SPEED.score;
+                    const betterPerformingPages = topSites.filter((site) => site.mobile > score);
 
+                    this.setState({
+                        loading: false,
+                        topSites,
+                        result: {
+                            speed: score,
+                            betterPages: betterPerformingPages,
+                        }
+                    });
+                }).catch((err) => {
                 this.setState({
                     loading: false,
-                    result: {
-                        speed: score,
-                        betterPages: betterPerformingPages,
-                    }
+                    error: err.message,
                 });
-            }).catch((err) => {
-            this.setState({
-                loading: false,
-                error: err.message,
             });
         });
     };
@@ -145,7 +156,7 @@ class App extends Component {
                     onSearch={this.executePageSpeed}
                     onSearchInputChange={this.handleSearchInputChange}
                 />
-                )
+            )
         } else {
             return (
                 <ResultBox
