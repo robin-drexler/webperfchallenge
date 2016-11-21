@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
+import {Redirect} from 'react-router'
+
 import SearchBox from '../components/SearchBox';
 import ResultBox from '../components/ResultBox';
 
@@ -92,6 +94,11 @@ export default class Result extends Component {
     }
 
     renderBody() {
+
+        if (!this.state.url) {
+            return (<Redirect to="/" />);
+        }
+
         if (typeof this.state.result.speed === 'undefined') {
             return (
                 <SearchBox
