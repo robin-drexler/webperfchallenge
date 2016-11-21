@@ -1,139 +1,22 @@
 import React, {Component, PropTypes} from 'react';
 import './App.css';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import AppBar from 'material-ui/AppBar';
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
 
-import SearchBox from './components/SearchBox';
-import ResultBox from './components/ResultBox';
+import {BrowserRouter as Router, Match} from 'react-router'
+
+
+import Index from './views/index';
+import Result from './views/result';
 
 injectTapEventPlugin();
 
-function isInBrowser() {
-    return typeof window !== 'undefined';
-}
-
-function sanitizeUrl(url) {
-    if (url.match(/https?:\/\//) === null) {
-        return 'http://' + url;
-    }
-    return url;
-}
-
-function getUrlQueryParam() {
-    if (!isInBrowser()) { // when rendered on server
-        return;
-    }
-    const matches = window.location.search.match(/\?url=(.*?)(&|$)/);
-
-    if (matches) {
-        return matches[1];
-    } else {
-        return null;
-    }
-}
-
 class App extends Component {
     state = {
-        topSites: [],
-        loading: false,
-        result: {},
-        error: null,
         menuOpened: false,
-        value: ''
-    };
-
-    loadTopSites = (() => {
-        let topSites;
-
-        return () => {
-            if (topSites) {
-                return Promise.resolve(topSites);
-            }
-
-            return new Promise((resolve) => {
-                const topsitesRef = this.props.firebase.database().ref("topsites").orderByChild("desktop");
-                topsitesRef.once('value', (snapshot) => {
-                    topSites = snapshot.val().sort(function (a, b) {
-                        const keyA = a.mobile;
-                        const keyB = b.mobile;
-
-                        if (keyA < keyB) return 1;
-                        if (keyA > keyB) return -1;
-                        return 0;
-                    });
-                    resolve(topSites)
-                });
-            });
-        };
-    })();
-
-    componentWillMount() {
-        const urlByQuery = getUrlQueryParam();
-
-        if (urlByQuery) {
-            this.setState({value: urlByQuery}, () => {
-                this.executePageSpeed();
-            })
-        } else {
-            isInBrowser() && this.loadTopSites(); // preload top sites in case user puts url in quickly
-        }
-    }
-
-    executePageSpeed = () => {
-        // e.preventDefault();
-        const sanitizedUrl = sanitizeUrl(this.state.value);
-        const url = encodeURI(sanitizedUrl);
-
-        ga('send', 'event', 'search', 'start', url); // eslint-disable-line no-undef
-
-        this.setState({
-            loading: true,
-            error: null,
-            url: url,
-            value: sanitizedUrl,
-        });
-
-        this.loadTopSites().then((topSites) => {
-            fetch(`https://www.googleapis.com/pagespeedonline/v2/runPagespeed?url=${url}&strategy=mobile`)
-                .then(r => r.json())
-                .then((json) => {
-                    if (json.error) {
-                        throw new Error(json.error.message)
-                    }
-                    const score = json.ruleGroups.SPEED.score;
-                    const slowerPages = topSites.filter((site) => site.mobile <= score);
-
-                    this.setState({
-                        loading: false,
-                        topSites,
-                        result: {
-                            speed: score,
-                            slowerPages,
-                        }
-                    });
-                }).catch((err) => {
-                this.setState({
-                    loading: false,
-                    error: err.message,
-                });
-            });
-        });
-    };
-
-    handleSearchInputChange = (e) => {
-        this.setState({value: e.target.value});
-    };
-
-    getHelp = () => {
-        ga('send', 'event', 'result-page', 'get-help', '', { // eslint-disable-line no-undef
-            'hitCallback': () => {
-                window.location.href = 'https://developers.google.com/speed/docs/insights/rules'
-            }
-        });
     };
 
     toggleMenu = (e) => {
@@ -148,33 +31,6 @@ class App extends Component {
         }
     };
 
-    renderBody() {
-
-        if (typeof this.state.result.speed === 'undefined') {
-            return (
-                <SearchBox
-                    key="form"
-                    loading={this.state.loading}
-                    error={this.state.error}
-                    searchValue={this.state.value}
-                    onSearch={this.executePageSpeed}
-                    onSearchInputChange={this.handleSearchInputChange}
-                />
-            )
-        } else {
-            return (
-                <ResultBox
-                    key="result"
-                    topSites={this.state.topSites}
-                    slowerPages={this.state.result.slowerPages}
-                    speed={this.state.result.speed}
-                    url={this.state.value}
-                    checkOtherWebsite={this.goto('/')}
-                />
-            )
-        }
-    }
-
     render() {
         return (
             <MuiThemeProvider>
@@ -185,13 +41,13 @@ class App extends Component {
                     </Drawer>
                     <AppBar onLeftIconButtonTouchTap={this.toggleMenu} title="How is your website performing?"/>
                     <div className="App-intro">
-                        <ReactCSSTransitionGroup
-                            transitionName="score"
-                            transitionEnterTimeout={500}
-                            transitionLeaveTimeout={500}
-                        >
-                            {this.renderBody()}
-                        </ReactCSSTransitionGroup>
+
+                        <Router>
+                            <div>
+                                <Match exactly pattern="/" component={Index} />
+                                <Match pattern="/result" component={(props) => <Result  firebase={this.props.firebase}  {...props} />} />
+                            </div>
+                        </Router>
 
                     </div>
                     <div style={{textAlign: 'center', paddingTop: '10px', fontSize: '0.8em'}}>

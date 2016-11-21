@@ -47,7 +47,7 @@ SearchBox.propTypes = {
     searchValue: PropTypes.string.isRequired,
     error: PropTypes.string,
     loading: PropTypes.bool.isRequired,
-    onSearch: PropTypes.func.isRequired,
-    onSearchInputChange: PropTypes.func.isRequired
+    onSearch: PropTypes.func,
+    onSearchInputChange: PropTypes.func
 };
 
