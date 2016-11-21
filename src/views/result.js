@@ -17,6 +17,7 @@ export default class Result extends Component {
         url: null,
         topSites: [],
         result: {},
+        error: null,
     };
 
     getUrl = () => {
@@ -104,6 +105,7 @@ export default class Result extends Component {
                 <SearchBox
                     searchValue={this.state.url}
                     loading={true}
+                    error={this.state.error}
                 />
             )
         } else {
