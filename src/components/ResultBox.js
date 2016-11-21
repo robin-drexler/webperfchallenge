@@ -40,7 +40,7 @@ export default function ResultBox(props) {
             </div>
             <div className="result-table">
                 <Card>
-                    <CardHeader title="Top sites performing better than yours"/>
+                    <CardHeader title="Most popular websites and their scores"/>
 
                     <Table allRowsSelected={false} selectable={false} className="overview">
                         <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
@@ -50,7 +50,7 @@ export default function ResultBox(props) {
                             </TableRow>
                         </TableHeader>
                         <TableBody displayRowCheckbox={false}>
-                            {props.slowerPages.map((entry, idx) => {
+                            {props.topSites.map((entry, idx) => {
                                 return (
                                     <TableRow key={idx}>
                                         <TableRowColumn>{entry.site}</TableRowColumn>
