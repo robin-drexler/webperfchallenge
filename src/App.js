@@ -105,14 +105,14 @@ class App extends Component {
                         throw new Error(json.error.message)
                     }
                     const score = json.ruleGroups.SPEED.score;
-                    const betterPerformingPages = topSites.filter((site) => site.mobile > score);
+                    const slowerPages = topSites.filter((site) => site.mobile <= score);
 
                     this.setState({
                         loading: false,
                         topSites,
                         result: {
                             speed: score,
-                            betterPages: betterPerformingPages,
+                            slowerPages,
                         }
                     });
                 }).catch((err) => {
@@ -166,7 +166,7 @@ class App extends Component {
                 <ResultBox
                     key="result"
                     topSites={this.state.topSites}
-                    betterPages={this.state.result.betterPages}
+                    slowerPages={this.state.result.slowerPages}
                     speed={this.state.result.speed}
                     getHelp={this.getHelp}
                 />

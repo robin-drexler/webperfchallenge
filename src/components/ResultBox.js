@@ -5,8 +5,8 @@ import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColu
 
 export default function ResultBox(props) {
 
-    let betterPagesPercentage = 100 / props.topSites.length * props.betterPages.length;
-    betterPagesPercentage = Math.ceil(betterPagesPercentage);
+    let slowerPagesPercentage = 100 / props.topSites.length * props.slowerPages.length;
+    slowerPagesPercentage = Math.ceil(slowerPagesPercentage);
 
     return (
         <div className="result card">
@@ -18,8 +18,7 @@ export default function ResultBox(props) {
                                 Your Google Page Speed Score is: <a target="_blank"
                                                                     href={`https://developers.google.com/speed/pagespeed/insights/?url=${props.url}&tab=mobile`}>{props.speed}</a>
                                 <br/><br/>
-                                {betterPagesPercentage}% of top 50 most popular websites perform better than
-                                your site.
+                                Your website performs better or equal to {slowerPagesPercentage}% of top 50 most popular websites.
                             </div>
                             <div>
                                 <RaisedButton primary label="Get help" onClick={props.getHelp}/>
@@ -40,7 +39,7 @@ export default function ResultBox(props) {
                             </TableRow>
                         </TableHeader>
                         <TableBody displayRowCheckbox={false}>
-                            {props.betterPages.map((entry, idx) => {
+                            {props.slowerPages.map((entry, idx) => {
                                 return (
                                     <TableRow key={idx}>
                                         <TableRowColumn>{entry.site}</TableRowColumn>
@@ -58,7 +57,7 @@ export default function ResultBox(props) {
 
 ResultBox.propTypes = {
     topSites: PropTypes.array.isRequired,
-    betterPages: PropTypes.array.isRequired,
+    slowerPages: PropTypes.array.isRequired,
     speed: PropTypes.number.isRequired,
     getHelp: PropTypes.func.isRequired,
 };
