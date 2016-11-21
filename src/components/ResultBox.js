@@ -24,7 +24,7 @@ export default function ResultBox(props) {
                                 Your Google Page Speed Score is: <a target="_blank"
                                                                     href={`https://developers.google.com/speed/pagespeed/insights/?url=${props.url}&tab=mobile`}>{props.speed}</a>
                                 <br/><br/>
-                                Your website performs better or equal to {slowerPagesPercentage}% of top 50 most popular websites.
+                                Your website performs better than or equal to {slowerPagesPercentage}% of top 50 most popular websites.
                             </div>
                             <div>
                                 <TweetButton
