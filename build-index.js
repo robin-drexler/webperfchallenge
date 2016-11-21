@@ -86,7 +86,7 @@ const start = `<!doctype html>
           box-sizing: border-box;
       }
       .result-content-text {
-          margin-bottom: 10px;
+          margin-bottom: 15px;
           font-size: 2em;
       }
       .input-content {

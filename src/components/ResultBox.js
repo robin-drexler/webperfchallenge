@@ -1,7 +1,13 @@
 import React, {PropTypes} from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
+import TweetButton from './TweetButton';
 import {Card, CardHeader, CardText} from 'material-ui/Card';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
+
+function getTweetText(url, slowerPagesPercent) {
+    const webPerfChallengeUrl = 'https://webperfchallenge.com/?url=' + url;
+    return `My website performs better than ${slowerPagesPercent} % of 50 most popular sites. ${webPerfChallengeUrl}`;
+}
 
 export default function ResultBox(props) {
 
@@ -21,7 +27,12 @@ export default function ResultBox(props) {
                                 Your website performs better or equal to {slowerPagesPercentage}% of top 50 most popular websites.
                             </div>
                             <div>
-                                <RaisedButton primary label="Get help" onClick={props.getHelp}/>
+                                <TweetButton
+                                    label={'Tweet score'}
+                                    tweetText={getTweetText(props.url, slowerPagesPercentage)}
+                                    style={{marginRight: '5px'}}
+                                />
+                                <RaisedButton secondary label="Check another website" onClick={props.checkOtherWebsite}/>
                             </div>
                         </div>
                     </CardText>
@@ -59,6 +70,7 @@ ResultBox.propTypes = {
     topSites: PropTypes.array.isRequired,
     slowerPages: PropTypes.array.isRequired,
     speed: PropTypes.number.isRequired,
-    getHelp: PropTypes.func.isRequired,
+    checkOtherWebsite: PropTypes.func.isRequired,
+    url: PropTypes.string.isRequired,
 };
 

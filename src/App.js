@@ -57,7 +57,7 @@ class App extends Component {
             return new Promise((resolve) => {
                 const topsitesRef = this.props.firebase.database().ref("topsites").orderByChild("desktop");
                 topsitesRef.once('value', (snapshot) => {
-                        topSites = snapshot.val().sort(function (a, b) {
+                    topSites = snapshot.val().sort(function (a, b) {
                         const keyA = a.mobile;
                         const keyB = b.mobile;
 
@@ -168,7 +168,8 @@ class App extends Component {
                     topSites={this.state.topSites}
                     slowerPages={this.state.result.slowerPages}
                     speed={this.state.result.speed}
-                    getHelp={this.getHelp}
+                    url={this.state.value}
+                    checkOtherWebsite={this.goto('/')}
                 />
             )
         }
