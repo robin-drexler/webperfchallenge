@@ -6,7 +6,7 @@ import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColu
 
 function getTweetText(url, slowerPagesPercent) {
     const webPerfChallengeUrl = 'https://webperfchallenge.com/?url=' + url;
-    return `My website performs better than ${slowerPagesPercent} % of 50 most popular sites. ${webPerfChallengeUrl}`;
+    return `My website performs better than ${slowerPagesPercent}% of 50 most popular sites. ${webPerfChallengeUrl}`;
 }
 
 export default function ResultBox(props) {
