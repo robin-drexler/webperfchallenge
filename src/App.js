@@ -6,9 +6,9 @@ import AppBar from 'material-ui/AppBar';
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
 
-import {BrowserRouter as Router, Match} from 'react-router'
+import {Match} from 'react-router'
 
-
+import Router from './components/Router';
 import Index from './views/index';
 import Result from './views/result';
 
