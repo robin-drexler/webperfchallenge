@@ -6,7 +6,7 @@ import AppBar from 'material-ui/AppBar';
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
 
-import {Match} from 'react-router'
+import {Match, Miss} from 'react-router'
 
 import Router from './components/Router';
 import Index from './views/index';
@@ -46,6 +46,7 @@ class App extends Component {
                             <div>
                                 <Match exactly pattern="/" component={Index} />
                                 <Match pattern="/result" component={(props) => <Result  firebase={this.props.firebase}  {...props} />} />
+                                <Miss component={Index} />
                             </div>
                         </Router>
 
