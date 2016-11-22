@@ -42,6 +42,19 @@ export default class Result extends Component {
         });
     };
 
+    fetchPageSpeed = (url) => {
+        return fetch(`https://www.googleapis.com/pagespeedonline/v2/runPagespeed?url=${url}&strategy=mobile`)
+            .then(r => r.json())
+            .then((json) => {
+                if (json.error) {
+                    throw new Error(json.error.message)
+                }
+                const score = json.ruleGroups.SPEED.score;
+
+                return Promise.resolve(score);
+            });
+    };
+
     executePageSpeed = () => {
         const sanitizedUrl = sanitizeUrl(this.getUrl());
         const url = encodeURI(sanitizedUrl);
@@ -55,29 +68,21 @@ export default class Result extends Component {
             value: sanitizedUrl,
         });
 
-        this.loadTopSites().then((topSites) => {
-            fetch(`https://www.googleapis.com/pagespeedonline/v2/runPagespeed?url=${url}&strategy=mobile`)
-                .then(r => r.json())
-                .then((json) => {
-                    if (json.error) {
-                        throw new Error(json.error.message)
-                    }
-                    const score = json.ruleGroups.SPEED.score;
-                    const slowerPages = topSites.filter((site) => site.mobile <= score);
+        Promise.all([this.loadTopSites(), this.fetchPageSpeed(url)]).then(([topSites, score]) => {
+            const slowerPages = topSites.filter((site) => site.mobile <= score);
 
-                    this.setState({
-                        loading: false,
-                        topSites,
-                        result: {
-                            speed: score,
-                            slowerPages,
-                        }
-                    });
-                }).catch((err) => {
-                this.setState({
-                    loading: false,
-                    error: err.message,
-                });
+            this.setState({
+                loading: false,
+                topSites,
+                result: {
+                    speed: score,
+                    slowerPages,
+                }
+            });
+        }).catch((error) => {
+            this.setState({
+                loading: false,
+                error: error.message,
             });
         });
     };
@@ -97,7 +102,7 @@ export default class Result extends Component {
     renderBody() {
 
         if (!this.state.url) {
-            return (<Redirect to="/" />);
+            return (<Redirect to="/"/>);
         }
 
         if (typeof this.state.result.speed === 'undefined') {
