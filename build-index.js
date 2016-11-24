@@ -22,7 +22,7 @@ const start = `<!doctype html>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="manifest" href="/manifest.json">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
-
+    <meta name="theme-color" content="#00bcd4">
 
     <title>Mobile web performance challenge</title>
     <style>
