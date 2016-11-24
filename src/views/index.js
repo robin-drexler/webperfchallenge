@@ -6,6 +6,7 @@ export default class Index extends Component {
     state = {
         value: '',
         redirect: null,
+        error: null,
     };
 
 
@@ -14,12 +15,23 @@ export default class Index extends Component {
     };
 
     handleSearch = (e) => {
-        const redirect = {
-            pathname: '/result',
-            query: {url: this.state.value}
-        };
 
-        this.setState({redirect});
+        if (this.state.value) {
+            const redirect = {
+                pathname: '/result',
+                query: {url: this.state.value},
+            };
+
+            this.setState({
+                redirect,
+                error: null,
+            });
+        } else {
+            this.setState({
+                error: 'Please provide an URL (like google.com)',
+            });
+        }
+
     };
 
     render() {
@@ -35,6 +47,7 @@ export default class Index extends Component {
                 loading={false}
                 onSearch={this.handleSearch}
                 onSearchInputChange={this.handleSearchInputChange}
+                error={this.state.error}
             />
 
         );
