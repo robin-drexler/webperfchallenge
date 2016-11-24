@@ -3,10 +3,10 @@
   "name": "mobile web performance challenge",
   "icons": [
     {
-      "src": "icon.png",
+      "src": "/icon.png",
       "type": "image/png",
-      "sizes": "96x96"
+      "sizes": "192x192"
     }
   ],
-  "start_url": "index.html?launcher=true"
+  "start_url": "/?launcher=true"
 }
