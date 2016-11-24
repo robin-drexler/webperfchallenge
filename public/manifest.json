@@ -1,0 +1,12 @@
+{
+  "short_name": "web perf challenge",
+  "name": "mobile web performance challenge",
+  "icons": [
+    {
+      "src": "icon.png",
+      "type": "image/png",
+      "sizes": "96x96"
+    }
+  ],
+  "start_url": "index.html?launcher=true"
+}
