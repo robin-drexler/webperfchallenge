@@ -7,11 +7,16 @@ export default class Index extends Component {
         value: '',
         redirect: null,
         error: null,
+        isFormFocussed: false
     };
 
 
     handleSearchInputChange = (e) => {
         this.setState({value: e.target.value});
+    };
+
+    handleSearchInputFocus = (e) => {
+        this.setState({isFormFocussed: true});
     };
 
     handleSearch = (e) => {
@@ -47,7 +52,9 @@ export default class Index extends Component {
                 loading={false}
                 onSearch={this.handleSearch}
                 onSearchInputChange={this.handleSearchInputChange}
+                onSearchInputFocus={this.handleSearchInputFocus}
                 error={this.state.error}
+                isFormFocussed={this.state.isFormFocussed}
             />
 
         );

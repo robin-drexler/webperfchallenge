@@ -9,6 +9,7 @@
     "react-scripts": "0.7.0"
   },
   "dependencies": {
+    "classnames": "^2.2.5",
     "firebase": "latest",
     "firebase-tools": "^3.1.0",
     "immutability-helper": "^2.0.0",

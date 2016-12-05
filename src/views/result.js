@@ -111,6 +111,7 @@ export default class Result extends Component {
                     searchValue={this.state.url}
                     loading={true}
                     error={this.state.error}
+                    isFormFocussed={true}
                 />
             )
         } else {

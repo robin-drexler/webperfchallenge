@@ -48,9 +48,13 @@ const start = `<!doctype html>
       }
 
       .form {
-          margin-top: 24px;
-          transition: opacity 0.5s linear;
+          margin-top: 15vh;
+          transition: all 0.3s ease-out;
           text-align: center;
+      }
+      
+      .form.focussed {
+        margin-top: 24px
       }
 
       .form.score-leave{

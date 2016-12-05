@@ -2,6 +2,7 @@ import React, {PropTypes} from 'react';
 import TextField from 'material-ui/TextField';
 import {Card, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
+import classNames from 'classnames';
 
 
 export default function SearchBox(props) {
@@ -11,9 +12,13 @@ export default function SearchBox(props) {
         props.onSearch();
     };
     const buttonText = props.loading ? 'loading...' : 'analyze';
+    const cssClasses = classNames({
+        'form': true,
+        'focussed': props.isFormFocussed
+    });
 
     return (
-        <form className="form" onSubmit={handleSubmit}>
+        <form className={cssClasses} onSubmit={handleSubmit}>
 
             <div className="card">
                 <Card>
@@ -23,6 +28,7 @@ export default function SearchBox(props) {
                         </h2>
                         <div className="input-content">
                             <TextField
+                                onFocus={props.onSearchInputFocus}
                                 className="url-input"
                                 id="search"
                                 errorText={props.error}
@@ -48,6 +54,8 @@ SearchBox.propTypes = {
     error: PropTypes.string,
     loading: PropTypes.bool.isRequired,
     onSearch: PropTypes.func,
-    onSearchInputChange: PropTypes.func
+    onSearchInputChange: PropTypes.func,
+    onSearchInputFocus: PropTypes.func,
+    isFormFocussed: PropTypes.bool.isRequired,
 };
 
