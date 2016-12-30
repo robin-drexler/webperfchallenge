@@ -12,15 +12,6 @@ export default function SearchBox(props) {
     props.onSearch();
   };
 
-  const handleKeypress = (e) => {
-    // allow values to be submitted even if it's not technically a valid url
-    // input is type url, so keyboards like swiftkey don't insert space etc after entering a dot
-    if (e.which === 13 ) {
-      e.preventDefault();
-      handleSubmit(e)
-    }
-  };
-
   const buttonText = props.loading ? 'loading...' : 'analyze';
   const cssClasses = classNames({
     'form': true,
@@ -28,7 +19,7 @@ export default function SearchBox(props) {
   });
 
   return (
-    <form className={cssClasses} onSubmit={handleSubmit}>
+    <form className={cssClasses} onSubmit={handleSubmit} noValidate>
 
       <div className="card">
         <Card>
@@ -46,7 +37,6 @@ export default function SearchBox(props) {
                 disabled={props.loading}
                 value={props.searchValue}
                 onChange={props.onSearchInputChange}
-                onKeyPress={handleKeypress}
                 type="url"
               />
               <div>
