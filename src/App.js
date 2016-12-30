@@ -39,7 +39,7 @@ class App extends Component {
                         <MenuItem onClick={this.goto('/')}>Home</MenuItem>
                         <MenuItem onClick={this.goto('/about.html')}>Imprint and privacy policy</MenuItem>
                     </Drawer>
-                    <AppBar onLeftIconButtonTouchTap={this.toggleMenu} title="How is your website performing?"/>
+                    <AppBar onLeftIconButtonTouchTap={this.toggleMenu} title="Mobile web performance challenge"/>
                     <div className="App-intro">
 
                         <Router>
