@@ -5,7 +5,7 @@ import {Card, CardHeader, CardText} from 'material-ui/Card';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 
 function getTweetText(url, slowerPagesPercent) {
-    const webPerfChallengeUrl = 'https://webperfchallenge.com/?url=' + url;
+    const webPerfChallengeUrl = 'https://webperfchallenge.com/result?url=' + url;
     return `My website performs better than ${slowerPagesPercent}% of 50 most popular sites. ${webPerfChallengeUrl}`;
 }
 
