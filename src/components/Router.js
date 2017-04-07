@@ -1,10 +1,10 @@
 import React from 'react';
-import {BrowserRouter, ServerRouter} from 'react-router'
+import {BrowserRouter, StaticRouter} from 'react-router-dom'
 
 export default function Router(props) {
     if (typeof window !== 'undefined') {
         return <BrowserRouter {...props} />
     } else {
-        return <ServerRouter location={'/'} {...props} />
+        return <StaticRouter location={'/'} {...props} />
     }
 }

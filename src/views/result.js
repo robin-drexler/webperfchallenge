@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import {Redirect} from 'react-router'
+import queryString from 'query-string';
 
 import SearchBox from '../components/SearchBox';
 import ResultBox from '../components/ResultBox';
@@ -22,7 +23,8 @@ export default class Result extends Component {
 
   getUrl = () => {
     const location = this.props.location;
-    return location.query ? location.query.url : '';
+    const queryObject = queryString.parse(location.search);
+    return queryObject.url || '';
   };
 
   loadTopSites = () => {

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import SearchBox from '../components/SearchBox';
-import {Redirect} from 'react-router'
+import {Redirect} from 'react-router-dom'
 
 export default class Index extends Component {
     state = {
@@ -20,11 +20,10 @@ export default class Index extends Component {
     };
 
     handleSearch = (e) => {
-
         if (this.state.value) {
             const redirect = {
                 pathname: '/result',
-                query: {url: this.state.value},
+                search: `?url=${this.state.value}`,
             };
 
             this.setState({
@@ -40,6 +39,7 @@ export default class Index extends Component {
     };
 
     render() {
+        console.log('INDEX')
         if (this.state.redirect) {
             return (
                 <Redirect to={this.state.redirect}/>
